@@ -1,0 +1,172 @@
+const prompt = require("prompt-sync") ();
+let nome = [];
+let continuar = true;
+
+function Menu() {
+    console.log("\n******************************");
+    console.log("--------SISTEMA DE JOGADORES----------")
+    console.log("1 - Cadastro de jogadores;");
+    console.log("2 - Deletar jogador;");
+    console.log("3 - Mostrar equipe;");
+    console.log("4 - Cálculo da Média da equipe;");
+    console.log("5 - Busca de jogador");
+    console.log("6 - Atualizar pontos");
+    console.log("7 - Sair do sistema.");
+}
+
+function Equipe() {
+    if (nome.length === 0) {
+        console.log("Nenhum jogador cadastrado.")
+        return;
+    }
+    for(let i = 0; i < nome.length; i++ ){
+//Função "for" funciona parecido com o while
+        let jogador = nome[i];
+        console.log((i + 1), ". ", jogador.nome, " Função: ", jogador.função, " | Pontuação: ", jogador.pontuação);
+    }
+
+}
+function Cadastrar() {
+    let novoJogador = prompt("Escreva o nome do jogador:");
+    let funçãoJogador = prompt("Digite a função deste jogador:");
+    let pontuaçãoJogador = Number(prompt("Digite a pontuação deste jogador:"));
+
+    if(isNaN(pontuaçãoJogador)){
+        console.log("Digite uma pontuação válida!");
+        return;
+    } else {
+        let recruta = {
+            nome: novoJogador,
+            função: funçãoJogador,
+            pontuação: pontuaçãoJogador
+        }
+        nome.push(recruta);
+        console.log("--------------------------------");
+        console.log ("Jogador(a)", recruta, "cadastrado com sucesso!");
+    }
+
+
+}
+
+function Deletar() {
+    if (nome.length === 0) {
+        console.log("--------------------------")
+        console.log ("Nenhum nome cadastrado");
+        return;
+    }
+    let nomeDeletado = prompt("Digite o nome a ser deletado:");
+    let indexdeletado = -1;
+    for (let i = 0; i < nome.length; i++) {
+
+        if(nome[i].nome === nomeDeletado) {
+            indexdeletado = i;
+            break;
+        }
+    }
+
+    if (indexdeletado === -1) {
+        console.log ("Não existe nenhum jogador com esse nome...");
+        return;
+    }
+
+    nome.splice(indexdeletado, 1);
+    console.log("Jogador deletado com sucesso.");
+}
+
+function Média() {
+    if (nome.length === 0) {
+        console.log("Nenhum jogador cadastrado.")
+        return;
+    }
+
+    let Pontototal = 0;
+
+    for (let i = 0; i < nome.length; i++) {
+        Pontototal = Pontototal + nome[i].pontuação;
+    }
+
+    let médiapontos = Pontototal / nome.length;
+
+    console.log("A equipe possui uma pontuação média de:", médiapontos);
+}
+    function Buscausuário() {
+            let nomedesejado = prompt("Digite o nome a ser buscado:");
+            console.log("****************************************")
+            console.log("Buscando por:", nomedesejado , "...");
+            let encontrado = false
+// Começamos assumindo que não encontramos ninguém 
+        for(let i = 0; i < nome.length;i++) {
+//O loop passa por todas as gavetas (posições) do nosso Array 
+            let JogadorAtual = nome[i];
+
+// Comparamos o nome da ficha com o nome procurado 
+            if (JogadorAtual.nome === nomedesejado) {
+                console.log("JOGADOR ENCONTRADO!");
+                console.log("Nome:", JogadorAtual.nome, "| Pontos:", JogadorAtual.pontuação);
+                encontrado = true;
+                break;
+            }
+        }
+        if (encontrado === false) {
+            console.log ("O jogador", nomedesejado, "não faz parte da nossa equipe");
+        }
+    }
+
+    function Atualizarpontos () {
+        let nomepontuação = prompt("Digite o nome do jogador que você quer atualizar os pontos:");
+            console.log("****************************************")
+            console.log("Buscando por:", nomepontuação, "...");
+            let encontrado = false 
+        for(let i = 0; i < nome.length;i++) {
+
+            let JogadorAtual = nome[i];
+
+            if (JogadorAtual.nome === nomepontuação) {
+                console.log("JOGADOR ENCONTRADO!");
+                let pontosnovos = Number(prompt("Quantos pontos " +  nomepontuação + " ganhou:"));
+                if(isNaN(pontosnovos)){
+                    console.log("Digite uma pontuação válida!");
+                    return;
+                }
+                JogadorAtual.pontuação = JogadorAtual.pontuação + pontosnovos;
+                console.log("SUCESSO! O jogador " + nomepontuação + " agora tem: " +  JogadorAtual.pontuação + " pontos.");
+                encontrado = true;
+                break;
+            }
+        }
+        if (encontrado === false) {
+            console.log ("O jogador", nomepontuação, "não faz parte da nossa equipe");
+        }
+        
+    }
+
+while(continuar === true) {
+    Menu();
+    let opção = prompt("Digite a sua opção:");
+
+    if (opção === "1") {
+        Cadastrar();
+
+    } else if (opção === "2") {
+        Deletar();
+
+    } else if (opção === "3") {
+        Equipe();
+
+    } else if (opção === "4") {
+        Média();
+
+    } else if (opção === "5") {
+       Buscausuário();
+
+    } else if(opção === "6") {
+        Atualizarpontos();
+
+    } else if(opção === "7") {
+        continuar = false;  
+
+    }
+    else {
+        console.log ("Opção inválida, digite uma opção válida...");
+    }
+}
